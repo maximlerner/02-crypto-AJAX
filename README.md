@@ -1,6 +1,6 @@
 ## Crypto:
 
-This project is an app which gives information about crypto currencies.
+This project is an app which gives information about crypto currencies.<br>
 The info is collected from api.coingecko.com API using AJAX call
 
 ## Used Technologies:
