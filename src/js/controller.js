@@ -2,9 +2,10 @@
 function renderHome() {
   insertToDOM();
   if(bodyContainer) bodyContainer.classList.remove('hidden');
-
+  
   // Remove interval from chart if still runs
   if(coinsInterval) clearInterval(coinsInterval);
+  console.log(Array.from(bodyContainer));
 }
 
 function renderLiveReports() {
@@ -23,13 +24,23 @@ const handleAbout = () => {
   if(coinsInterval) clearInterval(coinsInterval); 
 }
 
-function moreInfo() {
-  $(".btn").click(function () {
-    let that = $(this).attr("num");
-    console.log(that);
-    moreInfoBox = `<p> usd price ${coinArr[that].nameCrypto}</p>`;
+function handleMoreInfo() {
+  // 1) Find the coin-card element 
+  $(".coin-card").on("click",async function(e) {
+    // a) stop bubbling
+    e.stopImmediatePropagation();
 
-    $(this).parent().append(moreInfoBox);
+    // b) Find coin id
+    const coinID = ($(this).find('.coin-name').text()).toLowerCase();
+    
+    // c) Get more info about the coin
+    const data = await fetchMoreInfo(coinID);
+
+    // d) Optional: hide all panels
+    if(nodeList) hideAllPanels();
+
+    // e) display the chosen more info panel
+    if (data) showMoreInfo(data,$(this));
   });
 }
 
@@ -94,6 +105,10 @@ const updateCoinStatus = (coinName,coinSymbol,thatNum,inputSelected) => {
 }
 
 renderHome();
+
+
+
+
 
 
 

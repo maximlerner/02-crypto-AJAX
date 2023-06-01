@@ -87,6 +87,8 @@ input {
     justify-content: center;
     padding-top: 20px;
     padding-bottom: 20px;
+
+    grid-template-columns: auto auto auto;
 }
 
 /* Global element available when no content in the body-container */
@@ -116,6 +118,7 @@ input {
     height: 180px;
     /* with that atribute i can limit the text width */
     word-wrap: break-word;
+    /* position: relative; */
 }
 
 
@@ -161,4 +164,30 @@ p {
     text-align: left;
     outline: none;
     font-size: 15px;
+}
+
+.more-info-panel {
+    position: absolute;
+    width: 317.2px;
+    margin-left: 0px;
+    margin-top: 25px;
+    background-color: #ebeced;
+    border: 1px black solid;
+    z-index: 1;
+}
+
+.more-info-panel p {
+    margin-left: 10%;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.more-info-panel p:nth-child(2) {
+    text-decoration: underline;
+}
+
+.more-info-image {
+    position: absolute;
+    margin: 20px 0px 0px 180px;
+    width: 100px;
 }
