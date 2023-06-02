@@ -3,12 +3,12 @@ const inputValue = document.querySelector('.coin-input');
 const bodyContainer = document.querySelector('.body-container');
 const messageBox = document.querySelector('.message');
 
+// Contains all the cards that needs to be displayed
 let cardsArray = [];
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 // Variables mainly responsable on rendering data
-let row = "";
 let thatNum = 0;
 
 const buttonsArray = [
@@ -18,14 +18,18 @@ const buttonsArray = [
 ];
 
 // Functions
+
 function insertToDOM() {
-  const inputSearch = $('.coin-input').text();
-  console.log(inputSearch);
-  $(".body-container").empty();
-  $("#chart-container").empty();
-  coinArr = [];
-  // fetchCoins(inputSearch);
-  fetchCoins();
+  // 1) Get search input
+  const inputSearch = $('.coin-input').val();
+
+  // 2) Reset arrays
+  coinArrDefault = [];
+  coinArrSearch = [];
+  cardsArray = [];
+
+  // 3) get coins
+  fetchCoins(inputSearch);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +39,7 @@ function insertToDOM() {
 const renderCoins = (coinArr) => {
   // 1) Loop over result array
   for (i = 0; i < coinArr.length; i++) {
-
+    
     // 2) Create DOM elements
     // a) main card elements
     const coinCard = document.createElement("Div");
@@ -46,7 +50,7 @@ const renderCoins = (coinArr) => {
     const switchBTN = document.createElement("Div");
     const switchInput = document.createElement("input");
     const switchLabel = document.createElement("label");
-
+    
     // b) More info panel elements
     const moreInfoPanel = document.createElement("Div");
     const moreInfoImage = document.createElement("img");
@@ -54,7 +58,6 @@ const renderCoins = (coinArr) => {
     const usd = document.createElement("p");
     const eur = document.createElement("p");
     const ils = document.createElement("p");
-
     
     // 3) create object with all created elements for a single coin card
     const cardObj = {coinCard,headInfo,coinSymbel,coinName,moreInfoBTN,switchBTN,switchInput,switchLabel}
@@ -67,10 +70,11 @@ const renderCoins = (coinArr) => {
     setAttributes(cardObj,moreInfoObj);
     
     // 6) Set Text
-    setText(cardObj,moreInfoObj);
+    setText(cardObj,moreInfoObj,coinArr);
     
     // 7) Arrange hierarchy inside coin card
     setHierarchy(cardObj,moreInfoObj);
+    
     
     // 8) Complete the card and push it to the cardsArray
     cardsArray.push(cardObj.coinCard);
@@ -78,93 +82,6 @@ const renderCoins = (coinArr) => {
   // 9) After cards HTML are ready render all cards once as the for loop ends
   appendInCard(cardsArray) 
 };
-
-// Handle classes in coin card
-const addClasses = (cardObj,moreInfoObj) => {
-  cardObj.coinCard.classList.add("coin-card");
-  cardObj.headInfo.classList.add("headInfo");
-  cardObj.moreInfoBTN.classList.add("btn");
-  cardObj.moreInfoBTN.classList.add("btn-info");
-  cardObj.moreInfoBTN.classList.add("mybtn");
-  cardObj.switchBTN.classList.add("form-check");
-  cardObj.switchInput.classList.add("form-check-input");
-  cardObj.switchBTN.classList.add("form-switch");
-  cardObj.switchLabel.classList.add("form-check-label");
-  cardObj.coinName.classList.add("coin-name");
-  cardObj.coinSymbel.classList.add("coin-symbol");
-  
-  moreInfoObj.moreInfoPanel.classList.add("more-info-panel","hidden");
-  moreInfoObj.moreInfoImage.classList.add("more-info-image");
-  moreInfoObj.infoTitle.classList.add("info-title");
-  moreInfoObj.usd.classList.add("usd");
-  moreInfoObj.eur.classList.add("eur");
-  moreInfoObj.ils.classList.add("ils");
-} 
-
-
-// Handle attributs in coin card
-const setAttributes = (cardObj,moreInfoObj) => {
-  cardObj.moreInfoBTN.setAttribute("onclick", "handleMoreInfo()");
-  cardObj.moreInfoBTN.setAttribute("data-toggle", "collapse");
-  cardObj.moreInfoBTN.setAttribute("data-target", "info");
-  cardObj.moreInfoBTN.setAttribute("num", i);
-  cardObj.switchInput.setAttribute("num1", i);
-  cardObj.switchInput.setAttribute("type", "checkbox");
-  cardObj.switchInput.setAttribute("role", "switch");
-  cardObj.switchInput.setAttribute("onclick", "addCoinsToArray()");
-  cardObj.switchLabel.setAttribute("for", "flexSwitchCheckChecked");
-
-  moreInfoObj.moreInfoImage.setAttribute("src", "./src/img/bitcoin-g80ff29158_640.jpg");
-}
-
-
-// Handle text inside coin card
-const setText = (cardObj,moreInfoObj) => {
-  cardObj.coinSymbel.innerText = coinArr[i].symbol;
-  cardObj.coinName.innerText = coinArr[i].nameCrypto;
-  cardObj.moreInfoBTN.innerText = "More Info";
-  
-  moreInfoObj.infoTitle.innerText = 'Coin Prices:';
-  moreInfoObj.usd.innerText = 'USD: $30';
-  moreInfoObj.eur.innerText = 'EUR: €30';
-  moreInfoObj.ils.innerText = 'ILS: ₪30';
-} 
-
-// Handle elements order
-const setHierarchy = (cardObj, moreInfoObj) => {
-  cardObj?.switchBTN?.appendChild(cardObj.switchInput);
-  cardObj?.switchBTN?.appendChild(cardObj.switchLabel);
-  cardObj?.headInfo?.appendChild(cardObj.coinSymbel);
-  cardObj?.headInfo?.appendChild(cardObj.switchBTN);
-  cardObj?.coinCard?.appendChild(cardObj.headInfo);
-  cardObj?.coinCard?.appendChild(cardObj.coinName);
-  cardObj?.coinCard?.appendChild(cardObj.moreInfoBTN);
-  
-  moreInfoObj?.moreInfoPanel?.appendChild(moreInfoObj.moreInfoImage);
-  moreInfoObj?.moreInfoPanel?.appendChild(moreInfoObj.infoTitle);
-  moreInfoObj?.moreInfoPanel?.appendChild(moreInfoObj.usd);
-  moreInfoObj?.moreInfoPanel?.appendChild(moreInfoObj.eur);
-  moreInfoObj?.moreInfoPanel?.appendChild(moreInfoObj.ils);
-
-  cardObj?.coinCard?.appendChild(moreInfoObj.moreInfoPanel);
-}
-
-// Complete card element
-const appendInCard = (cardsArray) => {
-  // 1) Check the length of the cards array
-  const cardsCount = cardsArray.length;
-
-  // 2) Hide the waiting info message
-  messageBox.classList.add('hidden');
-
-  // 3) grid-Template-Columns property will be set depending on how many resuls we have
-  if (bodyContainer && cardsCount === 1) bodyContainer.style.gridTemplateColumns = 'auto';
-  if (bodyContainer && cardsCount === 2) bodyContainer.style.gridTemplateColumns = 'auto auto';
-  if (bodyContainer && cardsCount > 3) bodyContainer.style.gridTemplateColumns = 'auto auto auto';
-
-  // 4) Render cards array
-  $(".body-container").append(cardsArray);    
-}
 
 // That function recives type of button and by comparing the type and the buttons text the
 // function will decide which button need to highlighted and which not
@@ -195,6 +112,7 @@ const showMoreInfo = (data,thatCoin) => {
 }
 
 // Optional: in case we want do hide all panels before we open new one
+
 const hideAllPanels = () => {
   // 1) Loop over node list of the body-container to see if some panels are open
   nodeList[0].forEach(div => {
@@ -208,6 +126,7 @@ const hideAllPanels = () => {
 
 // Swal alert in modal window recives object that possibly contains error message from jQuery,
 // and 3 custom parameters iconType titleText and updateError for swal settings
+
 const renderError = (errorOBJ,iconType,titleText,updateError) => {
   // 1) Default values
   let errorMsg = 'Somthing went wrong';
@@ -233,10 +152,19 @@ const renderError = (errorOBJ,iconType,titleText,updateError) => {
 
 // About page settings
 const renderAbout = () => {
+  let row = "";
+
+  // 1) Reset HTML
   $(".body-container").empty();
   $("#chart-container").empty();
+
+  // 2) Insert new HTML
   row = `<H3>this site is about crypto currency</H3>`;
   $(".body-container").append(row);
+
+  // 3) Activate the about button
   highlightButton("About");
+
+  // 4) Display body Container if hidden
   if(bodyContainer) bodyContainer.classList.remove('hidden');
 }

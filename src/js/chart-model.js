@@ -1,4 +1,4 @@
-let coinsInterval
+let coinsInterval;
 
 // the justLoader will effect the updateInterval value in the renderChart
 let justLoaded = true;
@@ -32,15 +32,12 @@ const renderChart = () => {
       data: []
     });
 
-    console.log(switchObj.length);
-
     if(switchObj.length > 0) createDataArr(dataPoints1,switchObj[0].symbol,chart);
     if(switchObj.length > 1) createDataArr(dataPoints2,switchObj[1].symbol,chart);
     if(switchObj.length > 2) createDataArr(dataPoints3,switchObj[2].symbol,chart);
     if(switchObj.length > 3) createDataArr(dataPoints4,switchObj[3].symbol,chart);
     if(switchObj.length > 4) createDataArr(dataPoints5,switchObj[4].symbol,chart);
-    
-    
+     
     function toggleDataSeries(e) {
         if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
             e.dataSeries.visible = true;
@@ -67,7 +64,7 @@ const renderChart = () => {
     time.setSeconds(0);
     time.setMilliseconds(0);
     
-    function updateChart(coinsInterval) {
+    function updateChart() {
         // count = count || 1;
         let count =  1;
         // Here we check if the page just loaded. updateInterval can't be 0 because fetchPrices function need time
@@ -75,16 +72,10 @@ const renderChart = () => {
         
         updateInterval = justLoaded ? 250 : 2000;
         justLoaded = false;
-        console.log(updateInterval);
-        // console.log(updateInterval);
-        // alert(updateInterval);
-        
+  
         for (let i = 0; i < count; i++) {
             time.setTime(time.getTime()+ updateInterval);
-            
-            const updatedPrices = switchObj ? fetchPrices(switchObj,coinsInterval) : '';
-            console.log(updatedPrices[0]?.price);
-            
+                     
             // Updating prices 
             yValue1 = switchObj[0]?.price ? switchObj[0]?.price : yValue1;
             yValue2 = switchObj[1]?.price ? switchObj[1]?.price : yValue2;
@@ -166,12 +157,7 @@ const fetchPrices = async (switchObj,coinsInterval) => {
 
 const compareSymbols = (switchCoin,index,data) => {
     data.forEach(dataCoin => {
-        if(dataCoin[0][0] === switchCoin.symbol) {
-            console.log(`datacoin: ${dataCoin[0][0]} equal to switchCoin ${switchCoin.symbol} ${index}`);
-            switchObj[index].price = data[index][0][1].USD;
-            console.log(switchObj[index].price);
-        }                   
-    })
+        if(dataCoin[0][0] === switchCoin.symbol) switchObj[index].price = data[index][0][1].USD;})
 }
 
 const createDataArr = (dataPoints,name,chart) => {

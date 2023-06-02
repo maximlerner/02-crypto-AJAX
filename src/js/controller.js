@@ -5,7 +5,6 @@ function renderHome() {
   
   // Remove interval from chart if still runs
   if(coinsInterval) clearInterval(coinsInterval);
-  console.log(Array.from(bodyContainer));
 }
 
 function renderLiveReports() {
@@ -56,7 +55,6 @@ function addCoinsToArray() {
     const inputSelected = $(this).find('input').attr('checked');
 
     // 3) Toggle checked attribute on the input element
-    console.log(inputSelected);
     if (!inputSelected) $(this).find('input').attr('checked',true);
     if (inputSelected) $(this).find('input').attr('checked',false);
 
@@ -67,7 +65,7 @@ function addCoinsToArray() {
       let remove = false;
 
       // 5) When the user have 5 coins and he wants to remove one coin from switchObj
-      if(coinArr[thatNum].isChecked && switchObj.find(el => el.name === coinName)) {
+      if(coinArrDefault[thatNum].isChecked && switchObj.find(el => el.name === coinName)) {
         const indexToDelete = switchObj.findIndex(coin => coin.name === coinName);
         remove = true
         switchObj.splice(indexToDelete,1);      
@@ -75,18 +73,16 @@ function addCoinsToArray() {
       // 6) Here we check if step 5 didn't happend,if so the renderError will run only if the user have 5 coins and want more
       if(!remove) renderError(undefined,'info','Important','You have reached to the limit of the alowed coins, you can unselect one of the coins and chose new one!');
 
-      // 7) Prevent from  toggle input to change to active and to toggle the status of isChecked in the coinArr
+      // 7) Prevent from  toggle input to change to active and to toggle the status of isChecked in the coinArrDefault
       $(this).find(`[num1=${thatNum}]`).prop("checked", false);
-      coinArr[thatNum].isChecked = !coinArr[thatNum].isChecked;
+      coinArrDefault[thatNum].isChecked = !coinArrDefault[thatNum].isChecked;
     }
   });
-  console.log(switchObj);
 }
 
 const updateCoinStatus = (coinName,coinSymbol,thatNum,inputSelected) => {
-  console.log('updateCoinStatus');
-  // 1) Here we check if the clicked input isn't checked then we add new coin object to the coinArr array
-  if(!coinArr[thatNum].isChecked && !inputSelected) {
+  // 1) Here we check if the clicked input isn't checked then we add new coin object to the coinArrDefault array
+  if(!coinArrDefault[thatNum].isChecked && !inputSelected) {
     switchObj.push({
       name:coinName,
       symbol: coinSymbol.toUpperCase(),
@@ -94,14 +90,13 @@ const updateCoinStatus = (coinName,coinSymbol,thatNum,inputSelected) => {
       price: 0
     });    
   } 
-  // 2) Here if the coin is already in the user's coinArr array and the input element is on we will remove the coin 
-  if(coinArr[thatNum].isChecked && inputSelected) {
+  // 2) Here if the coin is already in the user's coinArrDefault array and the input element is on we will remove the coin 
+  if(coinArrDefault[thatNum].isChecked && inputSelected) {
     const indexToDelete = switchObj.findIndex(coin => coin.name === coinName);
     switchObj.splice(indexToDelete,1);
   }
-  console.log(switchObj);
   // 3) Toggle the isChecked status in the original array with all coins
-  coinArr[thatNum].isChecked = !coinArr[thatNum].isChecked;
+  coinArrDefault[thatNum].isChecked = !coinArrDefault[thatNum].isChecked;
 }
 
 renderHome();
