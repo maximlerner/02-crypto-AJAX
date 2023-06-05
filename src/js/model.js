@@ -14,6 +14,8 @@ const fetchCoins = async (inputFilled) => {
         localStorage.setItem("coinOBJ", JSON.stringify(coinArrDefault));
         if(!inputValid)renderCoins(coinArrDefault);
         if(inputValid)renderCoins(coinArrSearch);
+        nodeList.push(bodyContainer.childNodes);
+        console.log(nodeList);
         highlightButton("Home");
       },
       error: $(document).ajaxError((event,xhr,options,exc) => handleError(event,xhr,options,exc))

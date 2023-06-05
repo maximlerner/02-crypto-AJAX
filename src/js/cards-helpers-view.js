@@ -11,7 +11,7 @@ const addClasses = (cardObj,moreInfoObj) => {
     cardObj.switchBTN.classList.add("form-switch");
     cardObj.switchLabel.classList.add("form-check-label");
     cardObj.coinName.classList.add("coin-name");
-    cardObj.coinSymbel.classList.add("coin-symbol");
+    cardObj.coinSymbol.classList.add("coin-symbol");
     
     moreInfoObj.moreInfoPanel.classList.add("more-info-panel","hidden");
     moreInfoObj.moreInfoImage.classList.add("more-info-image");
@@ -23,7 +23,7 @@ const addClasses = (cardObj,moreInfoObj) => {
   
   
   // Handle attributs in coin card
-  const setAttributes = (cardObj,moreInfoObj) => {
+  const setAttributes = (cardObj,moreInfoObj,coinArr) => {
     cardObj.moreInfoBTN.setAttribute("onclick", "handleMoreInfo()");
     cardObj.moreInfoBTN.setAttribute("data-toggle", "collapse");
     cardObj.moreInfoBTN.setAttribute("data-target", "info");
@@ -33,6 +33,7 @@ const addClasses = (cardObj,moreInfoObj) => {
     cardObj.switchInput.setAttribute("role", "switch");
     cardObj.switchInput.setAttribute("onclick", "addCoinsToArray()");
     cardObj.switchLabel.setAttribute("for", "flexSwitchCheckChecked");
+    moreInfoObj.moreInfoPanel.setAttribute("symbol",(coinArr[i].nameCrypto).toLowerCase())
   
     moreInfoObj.moreInfoImage.setAttribute("src", "./src/img/bitcoin-g80ff29158_640.jpg");
   }
@@ -40,7 +41,7 @@ const addClasses = (cardObj,moreInfoObj) => {
   
   // Handle text inside coin card
   const setText = (cardObj,moreInfoObj,coinArr) => {
-    cardObj.coinSymbel.innerText = coinArr[i].symbol;
+    cardObj.coinSymbol.innerText = coinArr[i].symbol;
     cardObj.coinName.innerText = coinArr[i].nameCrypto;
     cardObj.moreInfoBTN.innerText = "More Info";
     
@@ -54,7 +55,7 @@ const addClasses = (cardObj,moreInfoObj) => {
   const setHierarchy = (cardObj, moreInfoObj) => {
     cardObj?.switchBTN?.appendChild(cardObj.switchInput);
     cardObj?.switchBTN?.appendChild(cardObj.switchLabel);
-    cardObj?.headInfo?.appendChild(cardObj.coinSymbel);
+    cardObj?.headInfo?.appendChild(cardObj.coinSymbol);
     cardObj?.headInfo?.appendChild(cardObj.switchBTN);
     cardObj?.coinCard?.appendChild(cardObj.headInfo);
     cardObj?.coinCard?.appendChild(cardObj.coinName);

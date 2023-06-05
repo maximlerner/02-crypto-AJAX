@@ -23,31 +23,59 @@ const handleAbout = () => {
   if(coinsInterval) clearInterval(coinsInterval); 
 }
 
+// function handleMoreInfo() {
+//   // 1) Find the coin-card element 
+//   $('.coin-card .btn-info').on("click",async function(e) {
+//     // a) stop bubbling
+//     e.stopImmediatePropagation();
+
+//     // b) Find coin id
+//     const coinID = $(this).attr('.symbol').toLowerCase();
+//     const $card = $(this).closest('.coin-card');
+//     console.log(coinID);
+
+//     // c) Get more info about the coin
+//     const data = await fetchMoreInfo(coinID);
+//     console.log(data);
+
+//     // d) Optional: hide all panels
+//     // if(nodeList) hideAllPanels();
+//     $card.find('.more-info-panel').toggleClass('hidden');
+
+//     // e) display the chosen more info panel
+//     if (data) showMoreInfo(data,$card);
+//   });
+// }
 function handleMoreInfo() {
-  // 1) Find the coin-card element 
-  $(".coin-card").on("click",async function(e) {
-    // a) stop bubbling
+  $('.coin-card .btn-info').on('click', async function(e) {
+    // find the parent .coin-card of the button that was clicked
     e.stopImmediatePropagation();
-
-    // b) Find coin id
-    const coinID = ($(this).find('.coin-name').text()).toLowerCase();
+    const $card = $(this).closest('.coin-card');
+    const $infoPanel = $card.find('.more-info-panel');
     
-    // c) Get more info about the coin
-    const data = await fetchMoreInfo(coinID);
+    const coinName = $card.find('.coin-name').text().toLowerCase();
+    const data = await fetchMoreInfo(coinName);
 
-    // d) Optional: hide all panels
-    if(nodeList) hideAllPanels();
+    const isOpen = $infoPanel.hasClass('hidden');
 
-    // e) display the chosen more info panel
-    if (data) showMoreInfo(data,$(this));
+    $('.coin-card .more-info-panel').addClass('hidden');
+    if (isOpen) $card.find('.more-info-panel').removeClass('hidden');
+
+    $card.find('.more-info-image').prop("src",data?.image?.large);
+    $card.find('.usd').text(`USD: $${data?.market_data?.current_price?.usd}`);
+    $card.find('.eur').text(`EUR: €${data?.market_data?.current_price?.eur}`);
+    $card.find('.ils').text(`ILS: ₪${data?.market_data?.current_price?.ils}`);
   });
 }
+
 
 function addCoinsToArray() {
   $(".coin-card").on("click", function (e) {
     // 1) Prevent bubbling effect 
     e.stopImmediatePropagation();
-
+    if(localStorage.getItem('coinOBJ')) nodeList = JSON.parse(localStorage.getItem('coinOBJ'));
+    console.log(switchObj);
+    
     // 2) Info from selected coin card
     const coinName = $(this).find('.coin-name').text();
     const coinSymbol = $(this).find('.coin-symbol').text();
@@ -76,6 +104,7 @@ function addCoinsToArray() {
       // 7) Prevent from  toggle input to change to active and to toggle the status of isChecked in the coinArrDefault
       $(this).find(`[num1=${thatNum}]`).prop("checked", false);
       coinArrDefault[thatNum].isChecked = !coinArrDefault[thatNum].isChecked;
+
     }
   });
 }

@@ -44,7 +44,7 @@ const renderCoins = (coinArr) => {
     // a) main card elements
     const coinCard = document.createElement("Div");
     const headInfo = document.createElement("Div");
-    const coinSymbel = document.createElement("p");
+    const coinSymbol = document.createElement("p");
     const coinName = document.createElement("p");
     const moreInfoBTN = document.createElement("button");
     const switchBTN = document.createElement("Div");
@@ -60,14 +60,14 @@ const renderCoins = (coinArr) => {
     const ils = document.createElement("p");
     
     // 3) create object with all created elements for a single coin card
-    const cardObj = {coinCard,headInfo,coinSymbel,coinName,moreInfoBTN,switchBTN,switchInput,switchLabel}
+    const cardObj = {coinCard,headInfo,coinSymbol,coinName,moreInfoBTN,switchBTN,switchInput,switchLabel}
     const moreInfoObj = {moreInfoPanel,moreInfoImage,infoTitle,usd,eur,ils};
     
     // 4) Set classes
     addClasses(cardObj,moreInfoObj);
     
     // 5) Set card attributes
-    setAttributes(cardObj,moreInfoObj);
+    setAttributes(cardObj,moreInfoObj,coinArr);
     
     // 6) Set Text
     setText(cardObj,moreInfoObj,coinArr);
@@ -80,7 +80,8 @@ const renderCoins = (coinArr) => {
     cardsArray.push(cardObj.coinCard);
   }
   // 9) After cards HTML are ready render all cards once as the for loop ends
-  appendInCard(cardsArray) 
+  appendInCard(cardsArray)
+  if(localStorage.getItem(localStorage.getItem('coinOBJ'))) nodeList = JSON.parse(localStorage.getItem('coinOBJ'));
 };
 
 // That function recives type of button and by comparing the type and the buttons text the
@@ -94,34 +95,30 @@ const highlightButton = (type) => {
   });
 };
 
-// 
-const showMoreInfo = (data,thatCoin) => {
+
+const showMoreInfo = (data,$card) => {
   // 1) Find all classes on more-info-panel and then find out if class hidden exists
-  const classListArray = thatCoin.find('.more-info-panel').attr("class");
-  const hidden = classListArray.split(' ')[1] === 'hidden';
 
   // 2) Toggle more-info-panel between displayed and hidden
-  if (hidden) thatCoin.find('.more-info-panel').removeClass('hidden');
-  if (!hidden) thatCoin.find('.more-info-panel').addClass('hidden');
+
+  nodeList[0].forEach(div => {
+    const coinNameFromArr = $(div).find('.coin-name').text();
+
+    if (coinNameFromArr.toLowerCase() === data.id ) {
+      const $infoPanel = $card.find('.more-info-panel');
+      const isOpen = $infoPanel.hasClass('hidden');
+
+      $('.coin-card .more-info-panel').addClass('hidden');
+
+      if (isOpen) $card.find('.more-info-panel').removeClass('hidden');
+    }
+  })
 
   // 3) Set new data inside panel
-  thatCoin.find('.more-info-image').prop("src",data?.image?.large);
-  thatCoin.find('.usd').text(`USD: $${data?.market_data?.current_price?.usd}`);
-  thatCoin.find('.eur').text(`EUR: €${data?.market_data?.current_price?.eur}`);
-  thatCoin.find('.ils').text(`ILS: ₪${data?.market_data?.current_price?.ils}`);
-}
-
-// Optional: in case we want do hide all panels before we open new one
-
-const hideAllPanels = () => {
-  // 1) Loop over node list of the body-container to see if some panels are open
-  nodeList[0].forEach(div => {
-    const panel = $(div).find('.more-info-panel').attr("class");
-    const panelClassesArr = panel.split(' ');
-
-    // 2) If element have only one class it means that panel is displayed add we need to hide it
-    if(panelClassesArr.length === 1) $(div).find('.more-info-panel').addClass("hidden");
-  });  
+  $card.find('.more-info-image').prop("src",data?.image?.large);
+  $card.find('.usd').text(`USD: $${data?.market_data?.current_price?.usd}`);
+  $card.find('.eur').text(`EUR: €${data?.market_data?.current_price?.eur}`);
+  $card.find('.ils').text(`ILS: ₪${data?.market_data?.current_price?.ils}`);
 }
 
 // Swal alert in modal window recives object that possibly contains error message from jQuery,
@@ -168,3 +165,4 @@ const renderAbout = () => {
   // 4) Display body Container if hidden
   if(bodyContainer) bodyContainer.classList.remove('hidden');
 }
+
