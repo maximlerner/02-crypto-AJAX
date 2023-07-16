@@ -72,11 +72,11 @@ nav a {
     color: #fff;
     background-color: #2f9e44;
     border: none;
-    border-radius: 6%;
+    border-radius: 5px;
     font-size: 16px;
     font-weight: 600;
     margin-left: 0.6rem;
-    padding: 0 16px;
+    padding: 0 1.6rem;
     height: 2.6rem;
 }
 
@@ -119,7 +119,7 @@ input {
 
 /* Chart element */
 #chart-container {
-    width: 1060px;
+    width: 55.5%;
     margin: 10px auto 10px auto;
 }
 
@@ -132,7 +132,6 @@ input {
     border-radius: 5px;
     /* with that atribute i can limit the text width */
     word-wrap: break-word;
-    /* position: relative; */
 }
 
 
@@ -246,6 +245,10 @@ p {
         width: 90%;
         justify-content: space-around;
     }
+
+    #chart-container {
+        width: 90%;
+    }
   
   }
 
@@ -297,6 +300,20 @@ p {
     .body-container {
         grid-template-columns: auto;
     }
+
+    nav ul {
+        padding-left: 0;
+    }
+
+    .coin-input {
+        padding: 1rem 1.6rem ;
+        height: 4rem;
+    }
+
+    .searchBTN {
+        padding: 1rem 1.6rem;
+        height: 4rem;
+    }
   }
 
   /***********************************/
@@ -307,5 +324,15 @@ p {
     nav ul {
         flex-direction: column;
         text-align: center;
+    }
+
+    .search {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 02rem;
+    }
+
+    .searchBTN {
+        margin-left: 0;
     }
   }
