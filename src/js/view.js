@@ -1,7 +1,7 @@
 // Global elements selectors
-const inputValue = document.querySelector('.coin-input');
-const bodyContainer = document.querySelector('.body-container');
-const messageBox = document.querySelector('.message');
+const inputValue = document.querySelector(".coin-input");
+const bodyContainer = document.querySelector(".body-container");
+const messageBox = document.querySelector(".message");
 
 // Contains all the cards that needs to be displayed
 let cardsArray = [];
@@ -21,7 +21,7 @@ const buttonsArray = [
 
 function insertToDOM() {
   // 1) Get search input
-  const inputSearch = $('.coin-input').val();
+  const inputSearch = $(".coin-input").val();
 
   // 2) Reset arrays
   coinArrDefault = [];
@@ -39,7 +39,6 @@ function insertToDOM() {
 const renderCoins = (coinArr) => {
   // 1) Loop over result array
   for (i = 0; i < coinArr.length; i++) {
-    
     // 2) Create DOM elements
     // a) main card elements
     const coinCard = document.createElement("Div");
@@ -50,7 +49,7 @@ const renderCoins = (coinArr) => {
     const switchBTN = document.createElement("Div");
     const switchInput = document.createElement("input");
     const switchLabel = document.createElement("label");
-    
+
     // b) More info panel elements
     const moreInfoPanel = document.createElement("Div");
     const moreInfoImage = document.createElement("img");
@@ -58,36 +57,51 @@ const renderCoins = (coinArr) => {
     const usd = document.createElement("p");
     const eur = document.createElement("p");
     const ils = document.createElement("p");
-    
+
     // 3) create object with all created elements for a single coin card
-    const cardObj = {coinCard,headInfo,coinSymbol,coinName,moreInfoBTN,switchBTN,switchInput,switchLabel}
-    const moreInfoObj = {moreInfoPanel,moreInfoImage,infoTitle,usd,eur,ils};
-    
+    const cardObj = {
+      coinCard,
+      headInfo,
+      coinSymbol,
+      coinName,
+      moreInfoBTN,
+      switchBTN,
+      switchInput,
+      switchLabel,
+    };
+    const moreInfoObj = {
+      moreInfoPanel,
+      moreInfoImage,
+      infoTitle,
+      usd,
+      eur,
+      ils,
+    };
+
     // 4) Set classes
-    addClasses(cardObj,moreInfoObj);
-    
+    addClasses(cardObj, moreInfoObj);
+
     // 5) Set card attributes
-    setAttributes(cardObj,moreInfoObj,coinArr);
-    
+    setAttributes(cardObj, moreInfoObj, coinArr);
+
     // 6) Set Text
-    setText(cardObj,moreInfoObj,coinArr);
-    
+    setText(cardObj, moreInfoObj, coinArr);
+
     // 7) Arrange hierarchy inside coin card
-    setHierarchy(cardObj,moreInfoObj);
-    
-    
+    setHierarchy(cardObj, moreInfoObj);
+
     // 8) Complete the card and push it to the cardsArray
     cardsArray.push(cardObj.coinCard);
   }
   // 9) After cards HTML are ready render all cards once as the for loop ends
-  appendInCard(cardsArray)
-  if(localStorage.getItem(localStorage.getItem('coinOBJ'))) nodeList = JSON.parse(localStorage.getItem('coinOBJ'));
+  appendInCard(cardsArray);
+  if (localStorage.getItem(localStorage.getItem("coinOBJ")))
+    nodeList = JSON.parse(localStorage.getItem("coinOBJ"));
 };
 
 // That function recives type of button and by comparing the type and the buttons text the
 // function will decide which button need to highlighted and which not
 const highlightButton = (type) => {
-
   // Toggle highlightedBTN class
   buttonsArray.forEach((btn) => {
     if (btn.text() === type) btn.addClass("highlightedBTN");
@@ -95,46 +109,46 @@ const highlightButton = (type) => {
   });
 };
 
-
-const showMoreInfo = (data,$card) => {
+const showMoreInfo = (data, $card) => {
   // 1) Find all classes on more-info-panel and then find out if class hidden exists
 
   // 2) Toggle more-info-panel between displayed and hidden
 
-  nodeList[0].forEach(div => {
-    const coinNameFromArr = $(div).find('.coin-name').text();
+  nodeList[0].forEach((div) => {
+    const coinNameFromArr = $(div).find(".coin-name").text();
 
-    if (coinNameFromArr.toLowerCase() === data.id ) {
-      const $infoPanel = $card.find('.more-info-panel');
-      const isOpen = $infoPanel.hasClass('hidden');
+    if (coinNameFromArr.toLowerCase() === data.id) {
+      const $infoPanel = $card.find(".more-info-panel");
+      const isOpen = $infoPanel.hasClass("hidden");
 
-      $('.coin-card .more-info-panel').addClass('hidden');
+      $(".coin-card .more-info-panel").addClass("hidden");
 
-      if (isOpen) $card.find('.more-info-panel').removeClass('hidden');
+      if (isOpen) $card.find(".more-info-panel").removeClass("hidden");
     }
-  })
+  });
 
   // 3) Set new data inside panel
-  $card.find('.more-info-image').prop("src",data?.image?.large);
-  $card.find('.usd').text(`USD: $${data?.market_data?.current_price?.usd}`);
-  $card.find('.eur').text(`EUR: €${data?.market_data?.current_price?.eur}`);
-  $card.find('.ils').text(`ILS: ₪${data?.market_data?.current_price?.ils}`);
-}
+  $card.find(".more-info-image").prop("src", data?.image?.large);
+  $card.find(".usd").text(`USD: $${data?.market_data?.current_price?.usd}`);
+  $card.find(".eur").text(`EUR: €${data?.market_data?.current_price?.eur}`);
+  $card.find(".ils").text(`ILS: ₪${data?.market_data?.current_price?.ils}`);
+};
 
 // Swal alert in modal window recives object that possibly contains error message from jQuery,
 // and 3 custom parameters iconType titleText and updateError for swal settings
 
-const renderError = (errorOBJ,iconType,titleText,updateError) => {
+const renderError = (errorOBJ, iconType, titleText, updateError) => {
   // 1) Default values
-  let errorMsg = 'Somthing went wrong';
-  let icon = 'error';
-  let title = 'Error!';
+  let errorMsg = "Somthing went wrong";
+  let icon = "error";
+  let title = "Error!";
 
   // 2) Change default values only by the next conditions
-  if(errorOBJ?.xhr?.status === 404) errorMsg = 'No coins found,please try to search another coin!';
-  if(iconType) icon = iconType;
-  if(titleText) title = titleText;
-  if(updateError) errorMsg = updateError;
+  if (errorOBJ?.xhr?.status === 404)
+    errorMsg = "No coins found,please try to search another coin!";
+  if (iconType) icon = iconType;
+  if (titleText) title = titleText;
+  if (updateError) errorMsg = updateError;
 
   // 3) Fire swal alert with the properties set above
   setTimeout(() => {
@@ -144,8 +158,8 @@ const renderError = (errorOBJ,iconType,titleText,updateError) => {
       icon: icon,
       confirmButtonText: "ok",
     });
-  },250)
-}
+  }, 250);
+};
 
 // About page settings
 const renderAbout = () => {
@@ -154,15 +168,29 @@ const renderAbout = () => {
   // 1) Reset HTML
   $(".body-container").empty();
   $("#chart-container").empty();
+  $(".message").addClass("hidden");
 
   // 2) Insert new HTML
-  row = `<H3>this site is about crypto currency</H3>`;
+  row = `
+  <div class="about">
+  <h2 class="about-header">About Currency World</h2>
+  <p>Currency World is a website where you can see online data about crypto currencies,
+  and also compare between other coins online</p>
+  <h2 class="about-header">Used Technologies in the project:</h2>
+  <ul class="technologies-list">
+  <li>HTML</li>
+  <li>Javascript</li>
+  <li>AJAX & Jquery</li>
+  <li>css</li>
+  </ul>
+  <div/>
+  `;
+
   $(".body-container").append(row);
 
   // 3) Activate the about button
   highlightButton("About");
 
   // 4) Display body Container if hidden
-  if(bodyContainer) bodyContainer.classList.remove('hidden');
-}
-
+  if (bodyContainer) bodyContainer.classList.remove("hidden");
+};

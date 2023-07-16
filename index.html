@@ -25,7 +25,7 @@
 
 <body>
   <div class="cryptoImg">
-    <img src="/src/img/crypto.jpg" height="250px" width="1060"><br>
+    <img src="/src/img/crypto.jpeg"><br>
   </div>
   <header class="wrapper">
     <nav>
@@ -33,9 +33,11 @@
         <li><button class="homeBTN" type="button" onclick="renderHome()">Home</button></li>
         <li><button class="liveReportBTN" type="button" onclick="renderLiveReports()">Live Reports</button></li>
         <li><button class="aboutBTN" type="button" onclick="handleAbout()">About</button></li>
-        <li><input class="coin-input"><button class="searchBTN" type="button" onclick="insertToDOM()">Search</button>
-        </li>
       </ul>
+      <div class="search">
+        <input class="coin-input"/>
+        <button class="searchBTN" type="button" onclick="insertToDOM()">Search</button>
+      </div>
     </nav>
   </header>
   <div class="body-outer">
